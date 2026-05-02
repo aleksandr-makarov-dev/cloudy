@@ -1,8 +1,8 @@
 ﻿using Carter;
 using Cloudy.API.Data;
-using Cloudy.API.Endpoints.Items.Requests;
 using Cloudy.API.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Minio;
 using Minio.DataModel.Args;
 
@@ -20,6 +20,18 @@ public sealed class UploadItemEndpoint : ICarterModule
                 CancellationToken cancellationToken
             ) =>
             {
+                // If parentId is provided than check if it is a folder and exists in database.
+                if (request.ParentId.HasValue)
+                {
+                    var exists = await dbContext.Items.AnyAsync(x => x.IsFolder && x.Id == request.ParentId.Value,
+                        cancellationToken);
+
+                    if (!exists)
+                    {
+                        return Results.BadRequest("Parent folder does not exist.");
+                    }
+                }
+
                 try
                 {
                     var id = Guid.NewGuid();
@@ -50,7 +62,9 @@ public sealed class UploadItemEndpoint : ICarterModule
                         Extension = extension,
                         ContentType = contentType,
                         Size = size,
-                        CreatedAt = DateTime.UtcNow
+                        IsFolder = false,
+                        CreatedAt = DateTime.UtcNow,
+                        ParentId = request.ParentId
                     };
 
                     dbContext.Items.Add(item);

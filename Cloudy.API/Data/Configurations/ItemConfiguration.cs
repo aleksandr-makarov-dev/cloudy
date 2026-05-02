@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Cloudy.API.Data.Configurations;
 
-public sealed class ItemConfiguration:IEntityTypeConfiguration<Item>
+public sealed class ItemConfiguration : IEntityTypeConfiguration<Item>
 {
     public void Configure(EntityTypeBuilder<Item> builder)
     {
         builder.ToTable("items");
-        
+
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Name)
@@ -17,17 +17,28 @@ public sealed class ItemConfiguration:IEntityTypeConfiguration<Item>
             .HasMaxLength(255);
 
         builder.Property(x => x.Extension)
-            .IsRequired()
+            .IsRequired(false)
             .HasMaxLength(25);
 
         builder.Property(x => x.ContentType)
-            .IsRequired()
+            .IsRequired(false)
             .HasMaxLength(100);
 
         builder.Property(x => x.Size)
+            .IsRequired(false);
+
+        builder.Property(x => x.IsFolder)
             .IsRequired();
 
         builder.Property(x => x.CreatedAt)
             .IsRequired();
+
+        builder.Property(x => x.ParentId)
+            .IsRequired(false);
+
+        builder.HasOne(x => x.Parent)
+            .WithMany()
+            .HasForeignKey(x => x.ParentId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

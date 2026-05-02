@@ -1,7 +1,6 @@
-﻿using Cloudy.API.Endpoints.Items.Requests;
-using FluentValidation;
+﻿using FluentValidation;
 
-namespace Cloudy.API.Endpoints.Items.Validators;
+namespace Cloudy.API.Endpoints.Items.Upload;
 
 public sealed class UploadItemRequestValidator : AbstractValidator<UploadItemRequest>
 {

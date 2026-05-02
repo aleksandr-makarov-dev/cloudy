@@ -10,16 +10,18 @@ public sealed class GetItemsEndpoint : ICarterModule
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         app.MapGet("api/items", async (
+                [FromQuery] Guid? parentId,
                 [FromServices] ApplicationDbContext dbContext,
                 CancellationToken cancellationToken
             ) =>
             {
                 var items = await dbContext.Items
                     .AsNoTracking()
+                    .Where(x => x.ParentId == parentId)
                     .OrderByDescending(x => x.CreatedAt)
                     .Select(x => new ItemResponse(
                         x.Id,
-                        $"{x.Name}.{x.Extension}",
+                        x.IsFolder ? x.Name : $"{x.Name}.{x.Extension}",
                         x.ContentType,
                         x.Size,
                         x.CreatedAt
