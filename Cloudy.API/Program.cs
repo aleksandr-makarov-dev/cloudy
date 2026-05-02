@@ -10,17 +10,23 @@ builder.Services.AddValidation();
 
 builder.Services.AddCarter();
 
-builder.Services.AddSwaggerGen();
+builder.Services.AddJwtSwaggerGen();
 builder.Services.AddEndpointsApiExplorer();
 
-var app = builder.Build();
+builder.Services.AddJwtAuthentication(builder.Configuration);
+builder.Services.AddAuthorization();
 
-app.MapCarter();
+var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapCarter();
 
 await app.RunAsync();
