@@ -1,4 +1,4 @@
-﻿namespace Cloudy.API;
+﻿namespace Cloudy.API.Infrastructure;
 
 public static class Constants
 {

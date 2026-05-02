@@ -1,3 +1,3 @@
-﻿namespace Cloudy.API.Endpoints.Items.Get;
+﻿namespace Cloudy.API.Features.Items.Get;
 
 public record ItemResponse(Guid Id, string DisplayName, string? ContentType, long? Size, DateTime CreatedAt);

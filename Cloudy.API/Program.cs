@@ -6,6 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDatabase(builder.Configuration);
 builder.Services.AddStorage(builder.Configuration);
 
+builder.Services.AddValidation();
+
 builder.Services.AddCarter();
 
 builder.Services.AddSwaggerGen();

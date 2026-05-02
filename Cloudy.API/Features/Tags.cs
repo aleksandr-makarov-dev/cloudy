@@ -1,4 +1,4 @@
-﻿namespace Cloudy.API.Endpoints;
+﻿namespace Cloudy.API.Features;
 
 public static class Tags
 {

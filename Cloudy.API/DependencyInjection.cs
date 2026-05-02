@@ -1,4 +1,5 @@
-﻿using Cloudy.API.Data;
+﻿using Cloudy.API.Infrastructure.Data;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Minio;
 
@@ -18,5 +19,10 @@ public static class DependencyInjection
             .WithEndpoint(configuration["Minio:Endpoint"])
             .WithCredentials(configuration["Minio:AccessKey"], configuration["Minio:SecretKey"])
             .WithSSL(false));
+    }
+
+    public static void AddValidation(this IServiceCollection services)
+    {
+        services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
     }
 }

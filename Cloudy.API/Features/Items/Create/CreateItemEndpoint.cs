@@ -1,10 +1,11 @@
 ﻿using Carter;
-using Cloudy.API.Data;
-using Cloudy.API.Entities;
+using Cloudy.API.Domain;
+using Cloudy.API.Infrastructure.Data;
+using Cloudy.API.Infrastructure.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Cloudy.API.Endpoints.Items.Create;
+namespace Cloudy.API.Features.Items.Create;
 
 public sealed class CreateItemEndpoint : ICarterModule
 {
@@ -45,6 +46,7 @@ public sealed class CreateItemEndpoint : ICarterModule
 
                 return Results.Ok(new { id = item.Id });
             })
+            .AddEndpointFilter<ValidationFilter<CreateItemRequest>>()
             .WithTags(Tags.Items);
     }
 }

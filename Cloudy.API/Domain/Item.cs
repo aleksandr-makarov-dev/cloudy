@@ -1,4 +1,4 @@
-﻿namespace Cloudy.API.Entities;
+﻿namespace Cloudy.API.Domain;
 
 public sealed class Item
 {

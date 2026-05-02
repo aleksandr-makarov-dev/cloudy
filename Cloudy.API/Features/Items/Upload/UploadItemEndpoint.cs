@@ -1,12 +1,14 @@
 ﻿using Carter;
-using Cloudy.API.Data;
-using Cloudy.API.Entities;
+using Cloudy.API.Domain;
+using Cloudy.API.Infrastructure;
+using Cloudy.API.Infrastructure.Data;
+using Cloudy.API.Infrastructure.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Minio;
 using Minio.DataModel.Args;
 
-namespace Cloudy.API.Endpoints.Items.Upload;
+namespace Cloudy.API.Features.Items.Upload;
 
 public sealed class UploadItemEndpoint : ICarterModule
 {
@@ -82,6 +84,7 @@ public sealed class UploadItemEndpoint : ICarterModule
                     return Results.BadRequest();
                 }
             })
+            .AddEndpointFilter<ValidationFilter<UploadItemRequest>>()
             .WithTags(Tags.Items)
             .DisableAntiforgery();
     }

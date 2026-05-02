@@ -1,7 +1,7 @@
-﻿using Cloudy.API.Entities;
+﻿using Cloudy.API.Domain;
 using Microsoft.EntityFrameworkCore;
 
-namespace Cloudy.API.Data;
+namespace Cloudy.API.Infrastructure.Data;
 
 public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
 {

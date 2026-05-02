@@ -1,8 +1,8 @@
-﻿using Cloudy.API.Entities;
+﻿using Cloudy.API.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Cloudy.API.Data.Configurations;
+namespace Cloudy.API.Infrastructure.Data.Configurations;
 
 public sealed class ItemConfiguration : IEntityTypeConfiguration<Item>
 {
