@@ -1,5 +1,6 @@
 ﻿using Cloudy.API.Infrastructure.Data;
 using FluentValidation;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Minio;
 
@@ -11,6 +12,10 @@ public static class DependencyInjection
     {
         services.AddDbContext<ApplicationDbContext>(options => options
             .UseNpgsql(configuration.GetConnectionString("PostgreSqlConnection")));
+
+        services.AddIdentity<IdentityUser<Guid>, IdentityRole<Guid>>()
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
     }
 
     public static void AddStorage(this IServiceCollection services, IConfiguration configuration)

@@ -1,4 +1,6 @@
-﻿namespace Cloudy.API.Domain;
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace Cloudy.API.Domain;
 
 public sealed class Item
 {
