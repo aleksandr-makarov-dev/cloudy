@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Cloudy.API.Infrastructure.Authentication;
 using Cloudy.API.Infrastructure.Data;
 using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -68,5 +69,11 @@ public static class DependencyInjection
                 [new OpenApiSecuritySchemeReference("bearer", document)] = []
             });
         });
+    }
+
+    public static void AddUserContext(this IServiceCollection services)
+    {
+        services.AddHttpContextAccessor();
+        services.AddScoped<IUserContext, UserContext>();
     }
 }

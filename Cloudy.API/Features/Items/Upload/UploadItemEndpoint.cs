@@ -22,7 +22,7 @@ public sealed class UploadItemEndpoint : ICarterModule
                 CancellationToken cancellationToken
             ) =>
             {
-                // If parentId is provided than check if it is a folder and exists in database.
+                // If a parent is specified, ensure it exists and is a folder
                 if (request.ParentId.HasValue)
                 {
                     var exists = await dbContext.Items.AnyAsync(x => x.IsFolder && x.Id == request.ParentId.Value,
@@ -30,6 +30,7 @@ public sealed class UploadItemEndpoint : ICarterModule
 
                     if (!exists)
                     {
+                        logger.LogWarning("Parent item with id {} was not found.", request.ParentId.Value);
                         return Results.BadRequest("Parent folder does not exist.");
                     }
                 }

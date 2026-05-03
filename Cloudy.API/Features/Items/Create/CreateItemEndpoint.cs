@@ -1,5 +1,6 @@
 ﻿using Carter;
 using Cloudy.API.Domain;
+using Cloudy.API.Infrastructure.Authentication;
 using Cloudy.API.Infrastructure.Data;
 using Cloudy.API.Infrastructure.Filters;
 using Microsoft.AspNetCore.Mvc;
@@ -14,10 +15,11 @@ public sealed class CreateItemEndpoint : ICarterModule
         app.MapPost("api/items", async (
                 [FromBody] CreateItemRequest request,
                 [FromServices] ApplicationDbContext dbContext,
+                [FromServices] IUserContext userContext,
                 CancellationToken cancellationToken
             ) =>
             {
-                // If parentId is provided than check if it is a folder and exists in database.
+                // If a parent is specified, ensure it exists and is a folder
                 if (request.ParentId.HasValue)
                 {
                     var exists = await dbContext.Items.AnyAsync(x => x.IsFolder && x.Id == request.ParentId.Value,
@@ -37,7 +39,8 @@ public sealed class CreateItemEndpoint : ICarterModule
                     Name = request.Name,
                     IsFolder = true,
                     CreatedAt = DateTime.UtcNow,
-                    ParentId = request.ParentId
+                    ParentId = request.ParentId,
+                    UserId =  userContext.UserId,
                 };
 
                 dbContext.Items.Add(item);
@@ -47,6 +50,7 @@ public sealed class CreateItemEndpoint : ICarterModule
                 return Results.Ok(new { id = item.Id });
             })
             .AddEndpointFilter<ValidationFilter<CreateItemRequest>>()
+            .RequireAuthorization()
             .WithTags(Tags.Items);
     }
 }

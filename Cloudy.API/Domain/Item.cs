@@ -21,4 +21,8 @@ public sealed class Item
     public Guid? ParentId { get; set; }
 
     public Item? Parent { get; set; }
+    
+    public Guid UserId { get; set; }
+    
+    public IdentityUser<Guid>?  User { get; set; }
 }
