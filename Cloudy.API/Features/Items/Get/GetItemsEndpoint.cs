@@ -1,4 +1,5 @@
 ﻿using Carter;
+using Cloudy.API.Infrastructure.Authentication;
 using Cloudy.API.Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,12 +13,13 @@ public sealed class GetItemsEndpoint : ICarterModule
         app.MapGet("api/items", async (
                 [FromQuery] Guid? parentId,
                 [FromServices] ApplicationDbContext dbContext,
+                [FromServices] IUserContext userContext,
                 CancellationToken cancellationToken
             ) =>
             {
                 var items = await dbContext.Items
                     .AsNoTracking()
-                    .Where(x => x.ParentId == parentId)
+                    .Where(x => x.ParentId == parentId && x.UserId == userContext.UserId)
                     .OrderByDescending(x => x.CreatedAt)
                     .Select(x => new ItemResponse(
                         x.Id,
@@ -30,6 +32,7 @@ public sealed class GetItemsEndpoint : ICarterModule
 
                 return Results.Ok(items);
             })
+            .RequireAuthorization()
             .WithTags(Tags.Items);
     }
 }
